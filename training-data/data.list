@@ -1,0 +1,8 @@
+[("How many kilograms Almonds can be bought for $50.5?",{"entities":[(0,8,"action"),(9,18,"unit"),(19,26,"item"),(45,50,"price")]}),
+("How many kg Mangoes can be bought for $500?",{"entities":[(0,8,"action"),(9,11,"unit"),(12,19,"item"),(38,42,"price")]}),
+("Cost of Almonds per kg?",{"entities":[(0,4,"action"),(8,15,"item"),(20,22,"unit")]}),
+("How much for a packet of milk?",{"entities":[(0,8,"action"),(15,21,"unit"),(25,29,"item")]}),
+("show me items which cost between $500 and $1000.",{"entities":[(8,13,"item"),(0,4,"action"),(25,32,"comparison"),(33,37,"price"),(42,47,"price")]}),
+("show me items under $500.",{"entities":[(20,24,"price"),(8,13,"item"),(14,19,"comparison"),(0,4,"action")]}),
+("list all the items.",{"entities":[(13,18,"item"),(0,4,"action")]}),
+("show me all items you have.",{"entities":[(0,7,"action"),(12,17,"item")]})]
