@@ -28,44 +28,57 @@ class SpacyNERTrainer:
                     file_content += line
         return json.loads(file_content)
 
+    def convert_json_to_spacy(self,input_json_list):
+        sentence_train_list = []
+        for inp_json in input_json_list:
+            text = inp_json["text"]
+            entities_list = []
+            for entity in inp_json["entities"]:
+                start = entity['start']
+                end = entity['end']
+                label = entity['label']
+                self.ner_labels.add(label)
+                entities_list.append((start,end,label))
+            sentence_train_list.append((text,{"entities":entities_list}))
+        return sentence_train_list
+
     def train(self):
         # Load Training data as JSON from input file
         input_json = self.get_input_sentences_json()
 
         # Convert JSON to Spacy input format
         training_data = self.convert_json_to_spacy(input_json)
+        print("=================== Training Data ===================")
+        print(training_data)
+
+        # As modle language. If its based on english then 'en'
+        nlp = spacy.blank(self.configs["MODEL_LANGUAGE"])
+        ner = nlp.create_pipe("ner")
+
+        nlp.add_pipe(ner, last=True)
+
+        # Add all the labels found in training file
+        for label in self.ner_labels:
+            nlp.entity.add_label(label)
+
+        # Set Vocab Vector name
+        nlp.vocab.vectors.name = self.configs["VECTOR_VOCAB_NAME"]
+        optimizer = nlp.begin_training()
+        no_of_iterations = int(self.configs["NO_OF_ITERATIONS"])
+
+        print("\n\n=================== NER Training In Progress ===================")
+        print("No of iterations : "+str(no_of_iterations))
+        for i in range(no_of_iterations):
+            print("Performing ("+str(i+1)+"/"+str(no_of_iterations)+") iteration...")
+            random.shuffle(training_data)
+            for text, annotations in training_data:
+                nlp.update([text], [annotations], sgd=optimizer)
+
+        # Save Custom model to output model path
+        print("Saving model to path : "+str(self.configs["MODEL_OUTPUT_PATH"]))
+        nlp.to_disk(self.configs["MODEL_OUTPUT_PATH"])
 
 
-#SPECIFY THE NER TRAINING DATA
-TRAIN_DATA = [("How many kilograms Almonds can be bought for $50.5?",{"entities":[(0,8,"action"),(9,18,"unit"),(19,26,"item"),(45,50,"price")]}),
-("How many kg Mangoes can be bought for $500?",{"entities":[(0,8,"action"),(9,11,"unit"),(12,19,"item"),(38,42,"price")]}),
-("Cost of Almonds per kg?",{"entities":[(0,4,"action"),(8,15,"item"),(20,22,"unit")]}),
-("How much for a packet of milk?",{"entities":[(0,8,"action"),(15,21,"unit"),(25,29,"item")]}),
-("show me items which cost between $500 and $1000.",{"entities":[(8,13,"item"),(0,4,"action"),(25,32,"comparison"),(33,37,"price"),(42,47,"price")]}),
-("show me items under $500.",{"entities":[(20,24,"price"),(8,13,"item"),(14,19,"comparison"),(0,4,"action")]}),
-("list all the items.",{"entities":[(13,18,"item"),(0,4,"action")]}),
-("show me all items you have.",{"entities":[(0,7,"action"),(12,17,"item")]})]
-
-nlp = spacy.blank('en')
-ner = nlp.create_pipe("ner")
-
-nlp.add_pipe(ner, last=True)
-
-#ADD THE CUSTOM NAMED ENTITIES HERE
-nlp.entity.add_label('action')
-nlp.entity.add_label('amount')
-nlp.entity.add_label('price')
-nlp.entity.add_label('comparison')
-nlp.entity.add_label('unit')
-nlp.entity.add_label('item')
-
-
-nlp.vocab.vectors.name = 'spacy_pretrained_vectors'
-optimizer = nlp.begin_training()
-for i in range(20):
-    random.shuffle(TRAIN_DATA)
-    for text, annotations in TRAIN_DATA:
-        nlp.update([text], [annotations], sgd=optimizer)
-#SAVE THE CUSTOM NER MODEL TO GOOGLE DRIVE
-nlp.to_disk("/home/syed/Documents/nlp/model")
-print("Model saved to Model folder")
+if __name__ == "__main__":
+    ner = SpacyNERTrainer("app.config")
+    ner.train()

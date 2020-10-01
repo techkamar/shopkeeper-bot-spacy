@@ -1,0 +1,177 @@
+[
+  {
+    "text": "How many kilograms Almonds can be bought for $50.5?",
+    "entities": [
+      {
+        "start": 0,
+        "end": 8,
+        "label": "action"
+      },
+      {
+        "start": 9,
+        "end": 18,
+        "label": "unit"
+      },
+      {
+        "start": 19,
+        "end": 26,
+        "label": "item"
+      },
+      {
+        "start": 45,
+        "end": 50,
+        "label": "price"
+      }
+    ]
+  },
+  {
+    "text": "How many kg Mangoes can be bought for $500?",
+    "entities": [
+      {
+        "start": 0,
+        "end": 8,
+        "label": "action"
+      },
+      {
+        "start": 9,
+        "end": 11,
+        "label": "unit"
+      },
+      {
+        "start": 12,
+        "end": 19,
+        "label": "item"
+      },
+      {
+        "start": 38,
+        "end": 42,
+        "label": "price"
+      }
+    ]
+  },
+  {
+    "text": "Cost of Almonds per kg?",
+    "entities": [
+      {
+        "start": 0,
+        "end": 4,
+        "label": "action"
+      },
+      {
+        "start": 8,
+        "end": 15,
+        "label": "item"
+      },
+      {
+        "start": 20,
+        "end": 22,
+        "label": "unit"
+      }
+    ]
+  },
+  {
+    "text": "How much for a packet of milk?",
+    "entities": [
+      {
+        "start": 0,
+        "end": 8,
+        "label": "action"
+      },
+      {
+        "start": 15,
+        "end": 21,
+        "label": "unit"
+      },
+      {
+        "start": 25,
+        "end": 29,
+        "label": "item"
+      }
+    ]
+  },
+  {
+    "text": "show me items which cost between $500 and $1000.",
+    "entities": [
+      {
+        "start": 8,
+        "end": 13,
+        "label": "item"
+      },
+      {
+        "start": 0,
+        "end": 4,
+        "label": "action"
+      },
+      {
+        "start": 25,
+        "end": 32,
+        "label": "comparison"
+      },
+      {
+        "start": 33,
+        "end": 37,
+        "label": "price"
+      },
+      {
+        "start": 42,
+        "end": 47,
+        "label": "price"
+      }
+    ]
+  },
+  {
+    "text": "show me items under $500.",
+    "entities": [
+      {
+        "start": 20,
+        "end": 24,
+        "label": "price"
+      },
+      {
+        "start": 8,
+        "end": 13,
+        "label": "item"
+      },
+      {
+        "start": 14,
+        "end": 19,
+        "label": "comparison"
+      },
+      {
+        "start": 0,
+        "end": 4,
+        "label": "action"
+      }
+    ]
+  },
+  {
+    "text": "list all the items.",
+    "entities": [
+      {
+        "start": 13,
+        "end": 18,
+        "label": "item"
+      },
+      {
+        "start": 0,
+        "end": 4,
+        "label": "action"
+      }
+    ]
+  },
+  {
+    "text": "show me all items you have.",
+    "entities": [
+      {
+        "start": 0,
+        "end": 7,
+        "label": "action"
+      },
+      {
+        "start": 12,
+        "end": 17,
+        "label": "item"
+      }
+    ]
+  }
+]
