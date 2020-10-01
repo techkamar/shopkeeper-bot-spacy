@@ -1,3 +1,0 @@
-1. Create JSON equivalent of Data.list
-2. Create Data.list to json converter
-3. Load JSON into NER_TRAIN ( Add tags automatically)

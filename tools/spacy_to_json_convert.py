@@ -1,6 +1,9 @@
 import sys
 import json
 
+"""
+    Usage : python spacy_to_json_convert.py data.list data.json
+"""
 
 def get_content_from_file(inp_file):
     content = ""
@@ -22,7 +25,7 @@ def get_entities_json(entity):
     indices_list = entity_tokens[0].split(",")
     entity_json["start"] = int(indices_list[0])
     entity_json["end"] = int(indices_list[1])
-    entity_json["tag"] = tag
+    entity_json["label"] = tag
     return entity_json
 
 
