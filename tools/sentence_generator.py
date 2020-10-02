@@ -10,28 +10,30 @@ class SentenceGenerator:
 			str(sys.argv[1])
 		except:
 			print("ERROR!!! Input Text File not specified")
-			exit(0)
+			# exit(0)
 
 		try:
 			str(sys.argv[2])
 		except:
 			print("ERROR!!! Input JSON File not specified")
-			exit(0)
+			# exit(0)
 
 		try:
 			str(sys.argv[3])
 		except:
 			print("ERROR!!! Output File not specified")
-			exit(0)
+			# exit(0)
 
 		# Read the input file
-		self.input_patterns_list = self.get_content_of_file(sys.argv[1])
+		# self.input_patterns_list = self.get_content_of_file(sys.argv[1])
+		self.input_patterns_list = ["list all the <items> of <man> of my <items>"]
 
 		# Get the config to generate the sentences for labels
-		self.label_config_json = json.loads(self.get_content_of_file(sys.argv[2]))
+		# self.label_config_json = json.loads(self.get_content_of_file(sys.argv[2]))
+		self.label_config_json = {"items": "COWWWW", "man": "PHEWWWWW"}
 
 		# Add main json for final output storage
-		self.final_json = {}
+		self.final_json = []
 
 	def get_content_of_file(self,file_name):
 		content = ""
@@ -59,7 +61,7 @@ class SentenceGenerator:
 					start_end = index_list[len(index_list) - 1]
 
 					start += start_end['end']
-					end += start
+					end = start + len(sub_str)
 
 				main_str = main_str[end + 1:]
 				index_list.append({'start': start, 'end': end, 'label': sub_str})
@@ -68,6 +70,27 @@ class SentenceGenerator:
 				break
 		return index_list
 
+	def replace_labels_with_values(self, sentence, index_list):
+		if len(index_list) == 0:
+			return None
+
+		for index in range(0, len(index_list)):
+			item_at_index = index_list[index]
+			label = item_at_index["label"]
+			label = label[1:len(label)-1]
+			replaced_word = self.label_config_json[label]
+			item_at_index['replaced_word'] = replaced_word
+			existing_word_length = item_at_index['end']-item_at_index['start']
+			additional_char_length = len(replaced_word)-existing_word_length
+			item_at_index['additional_char_length'] = additional_char_length
+
+			if index > 0:
+				item_at_index['start'] = item_at_index['start'] + index_list[index-1]['additional_char_length']
+			item_at_index['end'] = item_at_index['end'] + additional_char_length
+
+			index_list[index] = item_at_index
+		return None
+
 	def make_training_json(self, sentence):
 		index_list = []
 		for label in self.label_config_json.keys():
@@ -75,7 +98,9 @@ class SentenceGenerator:
 			for index in tmp_index_list:
 				index_list.append(index)
 
-		print(index_list)
+		single_entry_json = self.replace_labels_with_values(sentence,index_list)
+		if single_entry_json is not None:
+			self.final_json.append(single_entry_json)
 
 	def generate(self):
 		for sentence in self.input_patterns_list:
