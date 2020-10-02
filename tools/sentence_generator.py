@@ -89,7 +89,23 @@ class SentenceGenerator:
 			item_at_index['end'] = item_at_index['end'] + additional_char_length
 
 			index_list[index] = item_at_index
+
+		for element in index_list:
+			sentence = sentence[:element['start']] + element['replaced_word'] + sentence[element['end']+1:]
 		return None
+
+	def get_sorted_index_list(self, index_list):
+		new_index_list = []
+		start_index_map = {}
+		for item in index_list:
+			start_index_map[item['start']] = item
+
+		start_index_list = list(start_index_map.keys())
+		start_index_list.sort()
+		for start_index in start_index_list:
+			new_index_list.append(start_index_map[start_index])
+
+		return new_index_list
 
 	def make_training_json(self, sentence):
 		index_list = []
@@ -97,6 +113,8 @@ class SentenceGenerator:
 			tmp_index_list = self.get_all_indices_of_label_in_sentence(sentence, "<" + label + ">")
 			for index in tmp_index_list:
 				index_list.append(index)
+
+		index_list = self.get_sorted_index_list(index_list)
 
 		single_entry_json = self.replace_labels_with_values(sentence,index_list)
 		if single_entry_json is not None:
