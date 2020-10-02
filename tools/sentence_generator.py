@@ -64,7 +64,7 @@ class SentenceGenerator:
 					end = start + len(sub_str)
 
 				main_str = main_str[end + 1:]
-				index_list.append({'start': start, 'end': end, 'label': sub_str})
+				index_list.append({'start': start, 'end': end+1, 'label': sub_str})
 
 			except:
 				break
@@ -81,12 +81,12 @@ class SentenceGenerator:
 			replaced_word = self.label_config_json[label]
 			item_at_index['replaced_word'] = replaced_word
 			existing_word_length = item_at_index['end']-item_at_index['start']
-			additional_char_length = len(replaced_word)-existing_word_length
+			additional_char_length = len(replaced_word)-existing_word_length+1
 			item_at_index['additional_char_length'] = additional_char_length
 
 			if index > 0:
 				item_at_index['start'] = item_at_index['start'] + index_list[index-1]['additional_char_length']
-			item_at_index['end'] = item_at_index['end'] + additional_char_length
+			item_at_index['end'] = item_at_index['start'] + len(replaced_word) +1
 
 			index_list[index] = item_at_index
 
